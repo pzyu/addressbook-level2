@@ -11,12 +11,14 @@ import javax.xml.bind.Unmarshaller;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -96,6 +98,21 @@ public class StorageFile {
         /* Note: Note the 'try with resource' statement below.
          * More info: https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
          */
+        if (!path.toFile().exists()) {
+            throw new StorageOperationException("Error " + path + " not found");
+        }
+        
+        /** I gave up
+        try {
+            if (!path.toFile().exists()) {
+                throw new InvalidPathException(path.toString(), "File not found");
+            }
+        } catch (InvalidPathException ipe){
+            System.out.println("File not found");
+            System.out.println("Creating new file..");
+        }
+        */
+        
         try (final Writer fileWriter =
                      new BufferedWriter(new FileWriter(path.toFile()))) {
 
