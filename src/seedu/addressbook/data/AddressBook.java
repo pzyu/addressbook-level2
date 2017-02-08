@@ -5,6 +5,7 @@ import seedu.addressbook.data.person.UniquePersonList.*;
 import seedu.addressbook.data.tag.UniqueTagList;
 import seedu.addressbook.data.tag.UniqueTagList.*;
 import seedu.addressbook.data.tag.Tag;
+import seedu.addressbook.data.tag.Taggings;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,6 +23,7 @@ public class AddressBook {
 
     private final UniquePersonList allPersons;
     private final UniqueTagList allTags; // can contain tags not attached to any person
+    private Taggings taggings;
 
     /**
      * Creates an empty address book.
@@ -29,6 +31,7 @@ public class AddressBook {
     public AddressBook() {
         allPersons = new UniquePersonList();
         allTags = new UniqueTagList();
+        taggings = new Taggings();
     }
 
     /**
@@ -44,6 +47,7 @@ public class AddressBook {
         for (Person p : allPersons) {
             syncTagsWithMasterList(p);
         }
+        this.taggings = new Taggings();
     }
 
     /**
@@ -88,6 +92,8 @@ public class AddressBook {
      */
     public void addTag(Tag toAdd) throws DuplicateTagException {
         allTags.add(toAdd);
+
+        taggings.addTag(true, "some name", toAdd.tagName);
     }
 
     /**
@@ -120,6 +126,8 @@ public class AddressBook {
      */
     public void removeTag(Tag toRemove) throws TagNotFoundException {
         allTags.remove(toRemove);
+        
+        taggings.addTag(false, "some name", toRemove.tagName);
     }
 
     /**
